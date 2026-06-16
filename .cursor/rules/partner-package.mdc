@@ -1,0 +1,56 @@
+---
+description: LangChain partner integration package layout and export patterns
+globs: libs/partners/**/*
+alwaysApply: false
+---
+
+# Partner package conventions
+
+Applies when editing packages under `libs/partners/<name>/`.
+
+## Layout
+
+```txt
+libs/partners/<name>/
+├── langchain_<name>/     # Source package
+│   ├── __init__.py       # Public exports via __all__
+│   ├── _version.py
+│   └── ...
+├── tests/
+│   ├── unit_tests/       # No network calls
+│   └── integration_tests/ # Network allowed
+├── scripts/
+│   ├── check_imports.py
+│   ├── check_version.py
+│   └── lint_imports.sh
+├── Makefile
+├── pyproject.toml
+└── uv.lock
+```
+
+## Exports
+
+- Export public symbols from `__init__.py` with an explicit `__all__` list.
+- Import `__version__` from `_version.py`.
+
+```python
+from langchain_anthropic._version import __version__
+from langchain_anthropic.chat_models import ChatAnthropic
+
+__all__ = ["ChatAnthropic", "__version__"]
+```
+
+## Development commands
+
+Run from the partner package directory:
+
+```bash
+uv sync --group test
+make format
+make lint
+make test
+```
+
+- Unit tests use `--disable-socket` (no network).
+- Mirror source structure in `tests/unit_tests/`.
+- Do not touch `uv.lock` or add deps without maintainer approval.

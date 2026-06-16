@@ -1,0 +1,48 @@
+---
+description: Core LangChain Python coding standards from AGENTS.md
+alwaysApply: true
+---
+
+# LangChain coding conventions
+
+Source of truth: `AGENTS.md` at repo root. When in doubt, read that file.
+
+## Type hints and docstrings
+
+- All Python code MUST include type hints and return types.
+- Use Google-style docstrings with `Args`, `Returns`, and `Raises` for public functions.
+- Types go in signatures, NOT in docstrings.
+- Use single backticks for inline code in docstrings (not Sphinx double backticks).
+- Use American English spelling (`behavior`, not `behaviour`).
+
+```python
+def filter_items(items: list[str], allowed: set[str]) -> list[str]:
+    """Return items not in the allowed set.
+
+    Args:
+        items: Items to filter.
+        allowed: Set of allowed values.
+
+    Returns:
+        Items that are not in `allowed`.
+    """
+```
+
+## Code structure
+
+- Use descriptive variable names; follow patterns in the file you are editing.
+- Split complex functions (>20 lines) into smaller focused functions when it helps clarity.
+- No bare `except:` — use a `msg` variable for error messages.
+- No `eval()`, `exec()`, or `pickle` on user-controlled input.
+
+## Public API stability
+
+- Before changing exported APIs, check `__init__.py` exports and existing test usage.
+- Do not make breaking signature changes; warn on any signature change.
+- Add new parameters as keyword-only: `*, new_param: str = "default"`.
+
+## Environment
+
+- Use `uv` only — never `pip`, `poetry`, or `conda` directly.
+- Run `uv sync --group test` (or `--all-groups`) before tests.
+- Do not add dependencies to `pyproject.toml` without maintainer approval.

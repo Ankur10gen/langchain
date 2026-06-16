@@ -1,0 +1,36 @@
+---
+description: Approved boundaries and guardrails for LangChain contributions
+alwaysApply: true
+---
+
+# Contribution guardrails
+
+These boundaries keep changes safe and CI-aligned. Hard enforcement comes from `make lint`, `make test`, and CI — not from this rule alone.
+
+## Approved context boundaries
+
+- Stay inside this monorepo (`langchain-ai/langchain`). Do not copy code from external repos or Stack Overflow snippets.
+- Prefer local repo files and the docs MCP servers in `.mcp.json` (`docs-langchain`, `reference-langchain`) over memorized API details.
+- Do not pull in context from outside the repo unless the user explicitly provides it.
+- One PR should touch one package when possible.
+
+## Dependency and lockfile policy
+
+- Do not update `uv.lock` or add entries to `pyproject.toml` without explicit maintainer permission.
+- Do not introduce new dependencies unless strictly required and justified.
+
+## API and security
+
+- Preserve public function signatures; use keyword-only args for new parameters.
+- No breaking changes to exported APIs in `__init__.py`.
+- No `eval()`, `exec()`, or `pickle` on user-controlled input.
+- Remove unreachable or commented-out code before committing.
+
+## Workflow
+
+1. Read `AGENTS.md` and the target package's existing patterns before writing code.
+2. Scaffold code + tests following package layout.
+3. Run `make format`, `make lint`, `make test` in the package directory.
+4. Draft branch name, Conventional Commit title, and PR body before opening a PR.
+
+When unsure about a convention, search the repo for similar patterns or query the docs MCP — do not guess.

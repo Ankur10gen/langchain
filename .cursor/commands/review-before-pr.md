@@ -1,0 +1,114 @@
+# Review before opening a PR
+
+Run a pre-review quality pass on the current changes before human code review. Intended for engineers and QA.
+
+## Scope
+
+Review only files changed in the working tree or branch diff. Stay inside this monorepo.
+
+## Step 1 — Gather context
+
+```bash
+git status
+git diff
+git diff --name-only master...HEAD   # if on a feature branch
+```
+
+Identify which package(s) were touched and the Conventional Commit scope.
+
+## Step 2 — Convention checklist
+
+Check each item; mark PASS, FAIL, or N/A with a one-line note.
+
+### Code quality
+
+- [ ] Type hints and return types on all new/changed functions
+- [ ] Google-style docstrings on public functions (types in signatures, not docstrings)
+- [ ] American English spelling
+- [ ] No bare `except:`; error messages use a `msg` variable
+- [ ] No `eval()`, `exec()`, or `pickle` on user-controlled input
+- [ ] No commented-out or unreachable code left behind
+- [ ] Functions >20 lines split where appropriate
+
+### Public API
+
+- [ ] No breaking changes to exported signatures in `__init__.py`
+- [ ] New parameters are keyword-only (`*, param=...`)
+- [ ] New exports added to `__all__` if public
+
+### Deprecated APIs and anti-patterns
+
+- [ ] No use of deprecated LangChain APIs (search repo/tests for replacements)
+- [ ] No direct `pip`/`poetry`/`conda` usage — `uv` only
+- [ ] No unauthorized `pyproject.toml` or `uv.lock` changes
+- [ ] Patterns match sibling modules in the same package
+
+### Tests
+
+- [ ] Every new feature/bugfix has unit test coverage
+- [ ] Unit tests in `tests/unit_tests/` with no network calls
+- [ ] Test file structure mirrors source structure
+- [ ] Happy path, edge cases, and errors covered
+- [ ] Tests are deterministic (no flaky patterns)
+- [ ] Integration tests only where network behavior is explicitly required
+
+### Git / PR hygiene
+
+- [ ] Branch name: `<user>/<scope>/<kebab-description>`
+- [ ] PR title matches Conventional Commits (`type(scope): description`)
+- [ ] Scope is valid per `.github/workflows/pr_lint.yml`
+- [ ] PR description has no `# Summary` header; includes AI disclaimer
+- [ ] PR touches one package when possible
+
+## Step 3 — Run hard gates
+
+From each modified package directory:
+
+```bash
+make format
+make lint
+make test
+```
+
+Or:
+
+```bash
+.cursor/scripts/pre_pr.sh <package-path> "<proposed-pr-title>"
+```
+
+Record pass/fail for each command.
+
+## Step 4 — Produce the pre-review report
+
+Output a structured report:
+
+```markdown
+# Pre-review report
+
+**Package(s):** ...
+**Proposed PR title:** ...
+
+## Summary
+<1-2 sentence overall assessment: ready / needs work / blocked>
+
+## Checklist
+| Check | Status | Notes |
+|-------|--------|-------|
+| ... | PASS/FAIL/N/A | ... |
+
+## Hard gates
+- make format: PASS/FAIL
+- make lint: PASS/FAIL
+- make test: PASS/FAIL
+
+## Blockers (must fix before PR)
+1. ...
+
+## Suggestions (non-blocking)
+1. ...
+
+## Deprecated API / anti-pattern findings
+- ...
+```
+
+Be honest about uncertainty: if you cannot verify something, say how you would verify it.

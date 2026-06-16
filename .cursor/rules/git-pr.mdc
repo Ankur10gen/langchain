@@ -1,0 +1,52 @@
+---
+description: LangChain git branch, commit, and PR conventions from AGENTS.md and pr_lint.yml
+alwaysApply: false
+---
+
+# Git and PR conventions
+
+Source of truth: `AGENTS.md` and `.github/workflows/pr_lint.yml`.
+
+## Branch naming
+
+`<github-username>/<scope>/<short-description>` (kebab-case, no trailing slash)
+
+Examples: `jdoe/anthropic/normalize-tool-call-ids`, `jdoe/core/vector-store-type-hints`
+
+## PR title (Conventional Commits)
+
+Format: `type(scope): description`
+
+- Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`, `release`, `hotfix`
+- Scopes: `core`, `langchain`, `langchain-classic`, `model-profiles`, `standard-tests`, `text-splitters`, `docs`, partner names (`anthropic`, `openai`, ...), `infra`, `deps`, `partners`
+- Scope is REQUIRED for `langchain` package changes — never omit it.
+- Start description with lowercase unless first word is a proper noun or code symbol.
+- Wrap code symbols in backticks: `feat(langchain): \`ls_agent_type\` tag on \`create_agent\``
+
+Examples:
+
+```txt
+feat(anthropic): add streaming retry helper
+fix(core): resolve type hinting issue in vector store
+test(openai): update API usage tests
+```
+
+## PR description
+
+- No `# Summary` header — the description IS the summary.
+- Lead with `Fixes #123` (or `Closes`/`Resolves`) when applicable, then `---`, then body.
+- Explain **why**: who benefits, what problem, how this solves it.
+- Wrap class/function/method names in backticks; do not cite line numbers.
+- Skip dedicated "Test plan" sections unless coverage is non-obvious.
+- Add a brief disclaimer noting AI-agent involvement.
+- All contributions must be in English.
+
+## Pre-PR commands
+
+From the modified package directory:
+
+```bash
+make format && make lint && make test
+```
+
+Or run `.cursor/scripts/pre_pr.sh <package-path> "<pr-title>"`.

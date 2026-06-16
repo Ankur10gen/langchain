@@ -1,0 +1,40 @@
+---
+description: LangChain pytest conventions for unit and integration tests
+globs: libs/**/tests/**/*
+alwaysApply: false
+---
+
+# Testing conventions
+
+Every new feature or bugfix MUST have unit test coverage.
+
+## Layout
+
+- `tests/unit_tests/` — no network calls; use mocks/fixtures.
+- `tests/integration_tests/` — network calls permitted; needs API keys in CI.
+- Test file structure MUST mirror source code structure.
+
+## Unit test requirements
+
+- Use `pytest`; follow patterns in existing tests in the same package.
+- Tests must be deterministic (no flaky tests).
+- Cover happy path, edge cases, and error conditions.
+- Use fixtures/mocks for external dependencies.
+
+## Checklist before opening a PR
+
+- [ ] Tests fail when the new logic is broken
+- [ ] Happy path covered
+- [ ] Edge cases and errors tested
+- [ ] External deps mocked in unit tests
+- [ ] No network calls in unit tests
+
+## Running tests
+
+From the package directory (e.g. `libs/partners/anthropic/`):
+
+```bash
+make test                                    # all unit tests
+make test TEST_FILE=tests/unit_tests/test_x.py
+make integration_tests                       # needs credentials
+```
