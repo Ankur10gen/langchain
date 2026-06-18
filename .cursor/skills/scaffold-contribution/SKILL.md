@@ -1,10 +1,21 @@
+---
+name: scaffold-contribution
+description: Guide a new engineer through a correct, convention-compliant first LangChain contribution — scaffold code, tests, run gates, draft branch and PR.
+disable-model-invocation: true
+metadata:
+  recommended-model: composer
+  role: engineer
+---
+
 # Scaffold a LangChain contribution
 
 Guide a new engineer through a correct, convention-compliant first contribution in this monorepo.
 
 ## Model
 
-**Composer** — implementation and initial tests. Hand off to **Sonnet/Opus** + `/review-before-pr` in a new chat for cross-model verification.
+**Use Composer** for this skill (implementation + initial test drafting).
+
+Do **not** run `/review-before-pr` in the same chat session — hand off to **Sonnet or Opus** for independent cross-model review after scaffolding is done.
 
 ## Before you start
 
@@ -100,3 +111,5 @@ When done, report:
 3. Draft branch name, PR title, and PR body
 4. Any conventions you matched from existing code
 5. Known limitations or follow-ups
+
+**Handoff:** Tell the user to switch to **Sonnet or Opus** and run `/review-before-pr` for cross-model verification before opening the PR.

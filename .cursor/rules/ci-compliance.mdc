@@ -1,0 +1,48 @@
+---
+description: LangChain CI compliance, dependency policy, and path to release
+globs: .github/**/*
+alwaysApply: false
+---
+
+# CI compliance and release path
+
+Source of truth: `AGENTS.md` CI/CD section, `.github/workflows/`.
+
+## Contributor PR (feature/fix)
+
+- One package per PR when possible (`libs/partners/<name>/`, `libs/core/`, etc.).
+- Do not change `pyproject.toml` or `uv.lock` without maintainer approval.
+- Do not modify `.github/workflows/` on feature PRs unless assigned an infra task.
+- PR title must follow Conventional Commits — see `.github/workflows/pr_lint.yml`.
+- GitHub Actions must be pinned to full commit SHAs, not tags (`AGENTS.md`).
+
+## Local gates (mirror CI before push)
+
+```bash
+# Package gate (engineer)
+.cursor/scripts/pre_pr.sh libs/partners/<name> "type(scope): description"
+
+# PR-level gate (DevOps)
+.cursor/scripts/pre_merge_ci.sh --base master libs/partners/<name> "type(scope): description"
+```
+
+## Key CI workflows
+
+| Workflow | When it runs | Purpose |
+|----------|--------------|---------|
+| `pr_lint.yml` | Every PR | Conventional Commit title |
+| `check_diffs.yml` | PR | Lint + tests for changed packages |
+| `integration_tests.yml` | PR / schedule | Network tests (API keys in CI) |
+| `check_release_deps.yml` | Release PR + `pyproject.toml` | Deps must exist on PyPI |
+| `check_versions.yml` | Version bumps | `_version.py` consistency |
+| `_release.yml` | Manual (maintainers) | PyPI release |
+
+## Release path
+
+Deployment for this library is **maintainer-triggered PyPI release**, not app deploy. The onboarding kit stops at **merge-ready PR**; release is via `_release.yml` with `working-directory` and `release-version` inputs.
+
+## Release PRs
+
+- Title format: `release(scope): x.y.z`
+- Run `/release-readiness` or `pre_merge_ci.sh --allow-deps` before merge.
+- `check_release_deps.yml` validates runtime deps resolve on PyPI like end-user installs.

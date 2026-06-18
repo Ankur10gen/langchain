@@ -1,0 +1,24 @@
+{
+  "name": "LangChain: Scaffold contribution",
+  "description": "Engineer workflow — Composer — runs /scaffold-contribution skill. Writes code and unit tests.",
+  "workflow": {
+    "triggers": [
+      {
+        "webhook": {}
+      }
+    ],
+    "actions": [],
+    "prompts": [
+      "Run the LangChain Onboarding Kit **scaffold-contribution** workflow.\n\n**Model:** This automation is pinned to Composer. Do not change model for this run.\n\n**Instructions:** Read and follow `.cursor/skills/scaffold-contribution/SKILL.md` in this repository in full.\n\n**Input:** Use the contribution spec from the user, or ask which package and task to implement (default demo: small util + unit tests in `libs/partners/anthropic/`).\n\n**Gates:** Run `.cursor/scripts/pre_pr.sh <package-path> \"<proposed-pr-title>\"` before finishing.\n\n**Cross-model rule:** Do NOT run `/review-before-pr` in this session. When done, tell the user to run **LangChain: Review before PR** (Sonnet) in a **new automation run** for independent verification."
+    ],
+    "model": "composer-2.5",
+    "gitConfig": {
+      "repo": "langchain-ai/langchain",
+      "branch": "master"
+    },
+    "agentOptions": {
+      "skipInstall": false
+    },
+    "memoryEnabled": false
+  }
+}

@@ -1,10 +1,24 @@
+---
+name: review-before-pr
+description: Run a pre-review quality pass on LangChain changes before opening a PR — conventions, tests, deprecated APIs, and hard gates.
+disable-model-invocation: true
+metadata:
+  recommended-model: claude-sonnet
+  alternate-model: claude-opus
+  role: qa
+---
+
 # Review before opening a PR
 
 Run a pre-review quality pass on the current changes before human code review. Intended for engineers and QA.
 
 ## Model
 
-**Claude Sonnet** or **Opus** — must be a **different model** than `/scaffold-contribution` (Composer). Cross-model review: code written by one model, verified by another.
+**Use Claude Sonnet** (or **Opus** for high-risk or public API changes).
+
+**Cross-model rule:** This skill must run on a **different model** than `/scaffold-contribution` (which uses Composer). The reviewer independently re-reads the diff, challenges test adequacy, and re-runs gates — code written by one model, verified by another.
+
+If this session also authored the code, stop and ask the user to start a **new chat on Sonnet/Opus** before continuing.
 
 ## Scope
 

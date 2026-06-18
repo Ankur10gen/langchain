@@ -1,10 +1,21 @@
+---
+name: scope-contribution
+description: Turn a product idea or issue into a scoped LangChain engineering spec with package, scope, acceptance criteria, and test plan.
+disable-model-invocation: true
+metadata:
+  recommended-model: gpt-5.5
+  role: pm
+---
+
 # Scope a LangChain contribution
 
 Turn a product idea or issue into a scoped engineering spec. Intended for PMs and tech leads before an engineer starts coding.
 
 ## Model
 
-**GPT-5.5** — spec only. Hand off to **Composer** for `/scaffold-contribution`.
+**Use GPT-5.5** for this skill (structured spec writing, package mapping, acceptance criteria).
+
+No code changes — switch to **Composer** for `/scaffold-contribution` after the spec is approved.
 
 ## Input
 
@@ -80,10 +91,11 @@ As a <user>, I want <capability> so that <benefit>.
 **Package:** langchain-<name>
 **Feature description:** ...
 **Use case:** ...
+```
 
 ## Handoff to engineer
-Run `/scaffold-contribution` with this spec. Engineer should link PR to approved issue per contributing guidelines.
-```
+
+Run `/scaffold-contribution` with this spec (**Composer**). Then `/review-before-pr` on a **different model** (Sonnet or Opus). Engineer should link PR to approved issue per contributing guidelines.
 
 ## Constraints to enforce
 

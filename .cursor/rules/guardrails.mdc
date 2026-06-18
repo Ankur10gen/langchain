@@ -30,7 +30,9 @@ These boundaries keep changes safe and CI-aligned. Hard enforcement comes from `
 
 1. Read `AGENTS.md` and the target package's existing patterns before writing code.
 2. Scaffold code + tests following package layout.
-3. Run `make format`, `make lint`, `make test` in the package directory.
+3. Run `.cursor/scripts/pre_pr.sh <package-path>` (or `make format`, `make lint`, `make test` in the package directory).
 4. Draft branch name, Conventional Commit title, and PR body before opening a PR.
+
+DevOps: run `.cursor/scripts/pre_merge_ci.sh` before push for PR-level CI compliance and dependency policy.
 
 When unsure about a convention, search the repo for similar patterns or query the docs MCP — do not guess.

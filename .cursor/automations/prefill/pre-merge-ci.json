@@ -1,0 +1,24 @@
+{
+  "name": "LangChain: Pre-merge CI (DevOps)",
+  "description": "DevOps gate — no agent reasoning — documents pre_merge_ci.sh invocation. Optional companion to review automation.",
+  "workflow": {
+    "triggers": [
+      {
+        "webhook": {}
+      }
+    ],
+    "actions": [],
+    "prompts": [
+      "Run the LangChain **pre-merge CI gate** for the current branch.\n\n**Model:** Sonnet is acceptable; this task is mostly shell execution.\n\n**Steps:**\n1. Identify changed package(s) from `git diff --name-only master...HEAD`.\n2. Run `.cursor/scripts/pre_merge_ci.sh --base master <package-path> \"<proposed-pr-title>\"` from repo root.\n3. If dependency files changed and this is NOT a release PR, report failure and explain `--allow-deps` is for maintainers only.\n4. Summarize pass/fail and which CI workflows will run (see `.cursor/rules/ci-compliance.mdc`).\n\nDo not modify source files unless gates fail and fixes are required."
+    ],
+    "model": "claude-4.6-sonnet",
+    "gitConfig": {
+      "repo": "langchain-ai/langchain",
+      "branch": "master"
+    },
+    "agentOptions": {
+      "skipInstall": false
+    },
+    "memoryEnabled": false
+  }
+}
