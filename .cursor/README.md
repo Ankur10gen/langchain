@@ -28,7 +28,7 @@ Slash commands (`/scope-contribution`, etc.) remain available for ad-hoc Agent c
 
 1. Open this repo in Cursor (`/home/raina/langchain/langchain` or your clone path).
 2. Ensure rules load from `.cursor/rules/` (automatic in Cursor).
-3. Enable MCP servers from `.mcp.json` (see [Docs MCP](#docs-mcp) below).
+3. Confirm docs MCP servers in [`.cursor/mcp.json`](mcp.json) are connected (see [Docs MCP](#docs-mcp) below).
 4. Run a workflow:
    - PM: `/scope-contribution` → describe a feature idea
    - Engineer: `/scaffold-contribution` → implement the scoped task
@@ -162,20 +162,25 @@ Release PRs: use `/release-readiness` and `pre_merge_ci.sh --allow-deps` before 
 
 ## Docs MCP
 
-The repo ships [`.mcp.json`](../.mcp.json) with two HTTP MCP servers:
+Cursor reads project MCP config from [`.cursor/mcp.json`](mcp.json). The repo ships two public HTTP MCP servers (no API keys):
 
 | Server | URL | Use for |
 |--------|-----|---------|
 | `docs-langchain` | https://docs.langchain.com/mcp | Concepts, guides, contributing docs |
 | `reference-langchain` | https://reference.langchain.com/mcp | API reference lookups |
 
+The repo root also has [`.mcp.json`](../.mcp.json) with the same servers for other MCP clients (for example Claude Code). Keep both files in sync when changing server URLs.
+
 ### Enable in Cursor
 
-1. Open **Cursor Settings → MCP** (or use the repo's `.mcp.json` if Cursor auto-detects project MCP config).
-2. Confirm both servers appear and are enabled.
-3. In agent chat, prefer MCP doc lookups over memorized APIs when scoping or implementing features.
+1. Open this repo — [`.cursor/mcp.json`](mcp.json) should load automatically.
+2. Open **Cursor Settings → MCP** and confirm both servers show as connected.
+3. If they do not appear, run **Developer: Reload Window** from the Command Palette.
+4. In agent chat, prefer MCP doc lookups over memorized APIs when scoping or implementing features.
 
-The onboarding commands instruct the agent to use these servers at decision points (scoping, API design, checking if a feature exists).
+When connected, the agent can call tools such as `search_docs_by_lang_chain` and `query_docs_filesystem_docs_by_lang_chain`. Start a **new** chat after enabling MCP if an existing session was opened before the servers connected.
+
+The onboarding skills instruct the agent to use these servers at decision points (scoping, API design, checking if a feature exists).
 
 ## Team ownership and maintenance
 
@@ -226,6 +231,7 @@ Add a small pure function in `libs/partners/anthropic/langchain_anthropic/_clien
 ```txt
 .cursor/
 ├── README.md
+├── mcp.json
 ├── automations/
 │   ├── README.md
 │   └── prefill/
@@ -260,7 +266,8 @@ Add a small pure function in `libs/partners/anthropic/langchain_anthropic/_clien
 
 - [`AGENTS.md`](../AGENTS.md) — convention source of truth
 - [`.github/workflows/pr_lint.yml`](../.github/workflows/pr_lint.yml) — allowed commit types/scopes
-- [`.mcp.json`](../.mcp.json) — docs MCP server config
+- [`.cursor/mcp.json`](mcp.json) — docs MCP server config for Cursor
+- [`.mcp.json`](../.mcp.json) — same servers for other MCP clients
 - [`.github/PULL_REQUEST_TEMPLATE.md`](../.github/PULL_REQUEST_TEMPLATE.md) — PR template
 - [`.github/workflows/_release.yml`](../.github/workflows/_release.yml) — maintainer PyPI release
 - [`.github/workflows/check_release_deps.yml`](../.github/workflows/check_release_deps.yml) — release dependency validation
