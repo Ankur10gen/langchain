@@ -6,8 +6,8 @@ Cursor-native onboarding for the LangChain monorepo. **AGENTS.md is the source o
 
 | Role | Entry point | Purpose |
 |------|-------------|---------|
-| PM / Tech lead | `/scope-contribution` | Turn an idea into a scoped spec with package, scope, acceptance criteria |
-| Engineer | `/scaffold-contribution` | Scaffold code + tests, run gates, draft branch/PR |
+| PM / Tech lead | `/scope-contribution` | Turn an idea into a scoped spec; saves plan to `.cursor/plans/` |
+| Engineer | `/scaffold-contribution` | Load a plan from `.cursor/plans/`, scaffold code + tests, run gates |
 | QA / Engineer | `/review-before-pr` | Convention checklist + report; calls `pre_pr.sh` for hard gates |
 | DevOps / CI | `pre_merge_ci.sh`, `/release-readiness` | PR-level CI compliance, dependency policy, release risk |
 
@@ -82,7 +82,7 @@ Cursor discovers these as **skills** under `.cursor/skills/` (preferred in Curso
 ### Cross-model rule (write vs verify)
 
 ```text
-GPT-5.5 (scope)  →  Composer (scaffold: write code + tests)  →  Sonnet/Opus (review: verify)
+GPT-5.5 (scope → .cursor/plans/)  →  Composer (scaffold: load plan, write code + tests)  →  Sonnet/Opus (review: verify)
                          ↑ new chat, different model ↑
 ```
 
@@ -182,6 +182,15 @@ When connected, the agent can call tools such as `search_docs_by_lang_chain` and
 
 The onboarding skills instruct the agent to use these servers at decision points (scoping, API design, checking if a feature exists).
 
+## Contribution plans (`.cursor/plans/`)
+
+PM/engineer handoff folder for scoped specs:
+
+1. **`/scope-contribution`** writes `<YYYY-MM-DD>-<scope>-<kebab-slug>.md` after producing the spec.
+2. **`/scaffold-contribution`** lists plans (newest first), loads `latest` or a named file, and implements against acceptance criteria.
+
+See [`.cursor/plans/README.md`](plans/README.md). Plans are local by default — commit only when sharing with a teammate.
+
 ## Team ownership and maintenance
 
 ### Refreshing rules from AGENTS.md
@@ -232,6 +241,8 @@ Add a small pure function in `libs/partners/anthropic/langchain_anthropic/_clien
 .cursor/
 ├── README.md
 ├── mcp.json
+├── plans/
+│   └── README.md
 ├── automations/
 │   ├── README.md
 │   └── prefill/

@@ -41,7 +41,7 @@ Before scoping new work:
 
 ## Step 3 — Produce the scoped spec
 
-Output this template (fill every section):
+Fill this template (every section):
 
 ```markdown
 # Contribution spec: <short title>
@@ -82,8 +82,23 @@ As a <user>, I want <capability> so that <benefit>.
 **Use case:** ...
 
 ## Handoff to engineer
-Run `/scaffold-contribution` with this spec. Engineer should link PR to approved issue per contributing guidelines.
+Run `/scaffold-contribution` and load this plan from `.cursor/plans/`. Then `/review-before-pr` on a **different model** (Sonnet or Opus). Link the PR to an approved issue per contributing guidelines.
 ```
+
+## Step 4 — Save the plan for scaffold handoff
+
+After the spec is approved (or on first delivery unless the user asks to refine first), **write the filled spec to disk**:
+
+1. **Directory:** `.cursor/plans/` (create it if missing).
+2. **Filename:** `<YYYY-MM-DD>-<scope>-<kebab-slug>.md`
+3. **Content:** the full filled template from Step 3, including the Handoff section.
+4. If that filename already exists, append `-2`, `-3`, etc. before `.md`.
+
+Do **not** commit the plan unless the user asks.
+
+## Handoff to engineer
+
+Tell the user the saved plan path. Next: run `/scaffold-contribution` (Composer) with `latest` or a named plan file.
 
 ## Constraints to enforce
 
@@ -94,4 +109,6 @@ Run `/scaffold-contribution` with this spec. Engineer should link PR to approved
 
 ## Output
 
-Deliver the filled spec and ask whether to proceed to `/scaffold-contribution` or refine the scope.
+1. Show the filled spec in chat.
+2. Save it under `.cursor/plans/` (Step 4) and report the file path.
+3. Ask whether to refine the scope or hand off to `/scaffold-contribution`.

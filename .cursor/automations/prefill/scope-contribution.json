@@ -9,7 +9,7 @@
     ],
     "actions": [],
     "prompts": [
-      "Run the LangChain Onboarding Kit **scope-contribution** workflow.\n\n**Model:** This automation is pinned to GPT-5.5. Do not change model for this run.\n\n**Instructions:** Read and follow `.cursor/skills/scope-contribution/SKILL.md` in this repository in full.\n\n**Input:** If the user did not provide a feature idea, bug summary, or issue link in this run, ask one clarifying question about the desired outcome and affected users.\n\n**Output:** Produce the filled contribution spec template from the skill.\n\n**Handoff:** When done, tell the user to run the **LangChain: Scaffold contribution** automation next (Composer) — not a continuation of this chat."
+      "Run the LangChain Onboarding Kit **scope-contribution** workflow.\n\n**Model:** This automation is pinned to GPT-5.5. Do not change model for this run.\n\n**Instructions:** Read and follow `.cursor/skills/scope-contribution/SKILL.md` in this repository in full.\n\n**Input:** If the user did not provide a feature idea, bug summary, or issue link in this run, ask one clarifying question about the desired outcome and affected users.\n\n**Output:** Produce the filled contribution spec template from the skill and **save it to `.cursor/plans/`** (Step 4). Report the saved file path.\n\n**Handoff:** When done, tell the user to run the **LangChain: Scaffold contribution** automation next (Composer) — say `latest` or name the plan file. Not a continuation of this chat."
     ],
     "model": "gpt-5.5",
     "gitConfig": {

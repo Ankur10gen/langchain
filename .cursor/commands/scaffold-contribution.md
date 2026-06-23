@@ -9,8 +9,20 @@ Guide a new engineer through a correct, convention-compliant first contribution 
 ## Before you start
 
 1. Read `AGENTS.md` at the repo root (source of truth for conventions).
-2. Confirm the target package and scope with the user if not already specified.
-3. Use the docs MCP servers from `.mcp.json` (`docs-langchain`, `reference-langchain`) when you need API or design context — do not rely on memorized LangChain APIs.
+2. **Load a contribution plan** from `.cursor/plans/` (see below) unless the user gives a different task inline.
+3. Use the docs MCP servers from `.cursor/mcp.json` (`docs-langchain`, `reference-langchain`) when you need API or design context — do not rely on memorized LangChain APIs.
+
+### Pick a plan
+
+Plans are Markdown files from `/scope-contribution`. See `.cursor/plans/README.md`.
+
+1. List `.cursor/plans/*.md` (ignore `README.md`), newest first.
+2. User says **`latest`** or plans exist with no preference → use the newest plan.
+3. User names a file or slug → load the matching plan.
+4. Multiple plans and unclear intent → numbered list (title, scope, path); ask which to use.
+5. No plans → ask package/task or use the default demo task below.
+
+When a plan is loaded, implement against its **Acceptance criteria**, **Implementation hints**, and **Test plan**; use **Package and scope** for paths and PR scope; respect **Out of scope**.
 
 ## Default demo task (recommended)
 
@@ -26,7 +38,8 @@ Good packages to demo: `anthropic`, `ollama`, `deepseek` (pick one the user name
 
 ### Step 1 — Locate the package
 
-- Find the package under `libs/partners/<name>/` or `libs/core/`, `libs/langchain_v1/`, etc.
+- If using a plan from `.cursor/plans/`, start from its **Package and scope** section.
+- Otherwise find the package under `libs/partners/<name>/` or `libs/core/`, `libs/langchain_v1/`, etc.
 - Read `__init__.py`, nearby modules, and existing tests to match patterns.
 - Identify the Conventional Commit **scope** (e.g. `anthropic`, `core`, `langchain`).
 
@@ -95,8 +108,9 @@ Scaffold a new partner package skeleton under `libs/partners/` — this is much 
 
 When done, report:
 
-1. Files created or modified
-2. Test results from `make test`
-3. Draft branch name, PR title, and PR body
-4. Any conventions you matched from existing code
-5. Known limitations or follow-ups
+1. **Plan used:** path under `.cursor/plans/`, or "inline / demo task"
+2. Files created or modified
+3. Test results from `make test`
+4. Draft branch name, PR title, and PR body
+5. Any conventions you matched from existing code
+6. Known limitations or follow-ups

@@ -20,8 +20,25 @@ Do **not** run `/review-before-pr` in the same chat session — hand off to **So
 ## Before you start
 
 1. Read `AGENTS.md` at the repo root (source of truth for conventions).
-2. Confirm the target package and scope with the user if not already specified.
-3. Use the docs MCP servers from `.mcp.json` (`docs-langchain`, `reference-langchain`) when you need API or design context — do not rely on memorized LangChain APIs.
+2. **Load a contribution plan** from `.cursor/plans/` (see [Pick a plan](#pick-a-plan) below) unless the user gives a different task inline.
+3. Use the docs MCP servers from `.cursor/mcp.json` (`docs-langchain`, `reference-langchain`) when you need API or design context — do not rely on memorized LangChain APIs.
+
+## Pick a plan
+
+Plans are Markdown files written by `/scope-contribution`. See `.cursor/plans/README.md`.
+
+1. List `.cursor/plans/*.md` (ignore `README.md`), sorted newest first by filename or modification time.
+2. **If the user says `latest`** (or does not name a plan but plans exist) → use the newest plan file.
+3. **If the user names a file or slug** → load the matching plan (full path or partial match).
+4. **If multiple plans exist and intent is unclear** → show a numbered list with title (first `#` heading), scope, and path; ask which to use.
+5. **If no plans exist** → ask which package and task to implement, or fall back to the [default demo task](#default-demo-task-recommended).
+
+When a plan is loaded, treat it as the source of truth:
+
+- Implement against **Acceptance criteria**
+- Follow **Implementation hints** and **Test plan**
+- Use **Package and scope** for paths, branch name, and PR title scope
+- Respect **Out of scope**
 
 ## Default demo task (recommended)
 
@@ -37,7 +54,8 @@ Good packages to demo: `anthropic`, `ollama`, `deepseek` (pick one the user name
 
 ### Step 1 — Locate the package
 
-- Find the package under `libs/partners/<name>/` or `libs/core/`, `libs/langchain_v1/`, etc.
+- If using a plan from `.cursor/plans/`, start from its **Package and scope** section.
+- Otherwise find the package under `libs/partners/<name>/` or `libs/core/`, `libs/langchain_v1/`, etc.
 - Read `__init__.py`, nearby modules, and existing tests to match patterns.
 - Identify the Conventional Commit **scope** (e.g. `anthropic`, `core`, `langchain`).
 
@@ -106,10 +124,11 @@ Scaffold a new partner package skeleton under `libs/partners/` — this is much 
 
 When done, report:
 
-1. Files created or modified
-2. Test results from `make test`
-3. Draft branch name, PR title, and PR body
-4. Any conventions you matched from existing code
-5. Known limitations or follow-ups
+1. **Plan used:** path under `.cursor/plans/`, or "inline / demo task"
+2. Files created or modified
+3. Test results from `make test`
+4. Draft branch name, PR title, and PR body (aligned with the plan when one was loaded)
+5. Any conventions you matched from existing code
+6. Known limitations or follow-ups
 
 **Handoff:** Tell the user to switch to **Sonnet or Opus** and run `/review-before-pr` for cross-model verification before opening the PR.
