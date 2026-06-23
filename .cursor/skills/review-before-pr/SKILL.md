@@ -80,13 +80,31 @@ Check each item; mark PASS, FAIL, or N/A with a one-line note.
 
 ## Step 3 — Run hard gates
 
-Delegate to the package pre-PR script (do not duplicate make targets):
+Delegate to the package pre-PR script (do not duplicate make targets).
+
+### Run outside the Cursor agent sandbox
+
+Cursor's default agent sandbox **cannot access the Docker daemon**, even when Docker works in your WSL terminal. For packages that use Docker in `make test` (notably `libs/langchain_v1`), you **must** run the gate script with **unrestricted permissions** so Docker can start Postgres/Redis.
+
+When using the terminal/shell tool:
+
+1. Run `pre_pr.sh` with **full/unrestricted permissions** (disable sandbox).
+2. If unrestricted access is denied or Docker is still unavailable, re-run with `--fast` or accept the script's automatic fallback to `make test_fast`.
 
 ```bash
 .cursor/scripts/pre_pr.sh <package-path> "<proposed-pr-title>"
 ```
 
-Record pass/fail. If multiple packages were touched, run once per package or note that the PR should be split.
+For `libs/langchain_v1` only:
+
+- **Preferred:** unrestricted run → full `make test` (Docker)
+- **Fallback:** `--fast` or auto-fallback → `make test_fast` (in-memory services)
+
+Partner packages and most other paths do not need Docker.
+
+Record pass/fail for each gate. If multiple packages were touched, run once per package or note that the PR should be split.
+
+Parse the script header line `Tests: make test (...)` vs `Tests: make test_fast (...)` for the report.
 
 ## Step 4 — Produce the pre-review report
 
@@ -109,7 +127,11 @@ Output a structured report:
 ## Hard gates
 - make format: PASS/FAIL
 - make lint: PASS/FAIL
-- make test: PASS/FAIL
+- make test (Docker): PASS/FAIL/SKIPPED — full Postgres/Redis suite; SKIPPED if auto-fallback to test_fast
+- make test_fast: PASS/FAIL/N/A — ran when Docker unavailable or `--fast`
+- PR title: PASS/FAIL/N/A
+
+Note when Docker-backed tests were skipped: recommend the author run full `pre_pr.sh` locally or rely on CI.
 
 ## Blockers (must fix before PR)
 1. ...

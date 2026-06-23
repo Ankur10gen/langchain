@@ -74,6 +74,8 @@ Or from repo root:
 .cursor/scripts/pre_pr.sh libs/partners/<name>
 ```
 
+For `libs/langchain_v1`, run with **unrestricted permissions** in Agent chat so Docker can start test services; the script auto-falls back to `make test_fast` if Docker is unavailable.
+
 Fix any failures before proceeding. Do not skip lint or test failures.
 
 ### Step 5 — Draft git artifacts

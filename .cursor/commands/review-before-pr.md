@@ -66,13 +66,18 @@ Check each item; mark PASS, FAIL, or N/A with a one-line note.
 
 ## Step 3 — Run hard gates
 
-Delegate to the package pre-PR script (do not duplicate make targets):
+Delegate to the package pre-PR script (do not duplicate make targets).
+
+### Run outside the Cursor agent sandbox
+
+Cursor's default agent sandbox **cannot access the Docker daemon**. Run `pre_pr.sh` with **unrestricted permissions** when reviewing `libs/langchain_v1` (Docker-backed `make test`). If Docker is unavailable, the script auto-falls back to `make test_fast` unless `--require-docker` is set.
 
 ```bash
 .cursor/scripts/pre_pr.sh <package-path> "<proposed-pr-title>"
+.cursor/scripts/pre_pr.sh --fast libs/langchain_v1 "<title>"   # explicit fast path
 ```
 
-Record pass/fail. If multiple packages were touched, run once per package or note that the PR should be split.
+Record pass/fail. Parse the script's `Tests: make test (...)` line for the report.
 
 ## Step 4 — Produce the pre-review report
 
@@ -95,7 +100,9 @@ Output a structured report:
 ## Hard gates
 - make format: PASS/FAIL
 - make lint: PASS/FAIL
-- make test: PASS/FAIL
+- make test (Docker): PASS/FAIL/SKIPPED
+- make test_fast: PASS/FAIL/N/A
+- PR title: PASS/FAIL/N/A
 
 ## Blockers (must fix before PR)
 1. ...

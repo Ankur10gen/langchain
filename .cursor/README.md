@@ -116,7 +116,9 @@ One quality bar, three layers:
 .cursor/scripts/pre_pr.sh libs/core "fix(core): resolve type hint issue"
 ```
 
-Runs `uv sync --group test`, `make format`, `make lint`, `make test`, and optionally validates PR title format against `.github/workflows/pr_lint.yml`.
+Runs `uv sync --group test`, `make format`, `make lint`, `make test` (or `make test_fast` when Docker is unavailable / `--fast`), and optionally validates PR title format against `.github/workflows/pr_lint.yml`.
+
+For `libs/langchain_v1`, `make test` starts Postgres and Redis via Docker. When the Cursor agent sandbox blocks Docker, the script **auto-falls back** to `make test_fast`. Run from a normal terminal or with unrestricted agent permissions for the full Docker-backed suite.
 
 ## Pre-merge gate (DevOps)
 
