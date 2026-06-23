@@ -118,10 +118,6 @@ Fixes #<issue-number>
 - `make format`, `make lint`, and `make test` pass in `libs/partners/<name>/`
 ```
 
-## Stretch goal (only if user asks)
-
-Scaffold a new partner package skeleton under `libs/partners/` — this is much larger and requires CI file updates per `AGENTS.md`. Prefer the default demo task for live sessions.
-
 ## Output summary
 
 When done, report:
